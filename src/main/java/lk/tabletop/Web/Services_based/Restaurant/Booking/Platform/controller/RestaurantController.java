@@ -35,11 +35,18 @@ public class RestaurantController {
         return restaurantService.addRestaurant(restaurantDto);
     }
 
-    @PutMapping("/admin/updateRestaurant/{id}")
+    @PutMapping("/admin/updateRestaurant")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<StandardResponse<?>> updateRestaurant(@PathVariable Long id,
+    public ResponseEntity<StandardResponse<?>> updateRestaurant(@RequestParam Long id,
                                                                 @RequestBody @Valid RestaurantDto restaurantDto) {
         return restaurantService.updateRestaurant(id, restaurantDto);
     }
+
+    @DeleteMapping("/admin/deleteRestaurant")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<StandardResponse<?>> deleteRestaurant(@RequestParam Long id) {
+        return restaurantService.deleteRestaurant(id);
+    }
+
 
 }

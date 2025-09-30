@@ -131,4 +131,25 @@ public class RestaurantServiceImpl implements RestaurantService {
         return ResponseEntity.ok(response);
     }
 
+    @Override
+    public ResponseEntity<StandardResponse<?>> deleteRestaurant(Long id) {
+        // Check if the restaurant exists
+        Restaurant restaurant = restaurantRepository.findById(id).orElse(null);
+
+        if (restaurant == null) {
+            StandardResponse<Object> response = new StandardResponse<>(404, "Restaurant not found");
+            return ResponseEntity.status(404).body(response);
+        }
+
+        // Delete the restaurant
+        restaurantRepository.delete(restaurant);
+
+        StandardResponse<Object> response = new StandardResponse<>(
+                200,
+                "Restaurant deleted successfully"
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
 }

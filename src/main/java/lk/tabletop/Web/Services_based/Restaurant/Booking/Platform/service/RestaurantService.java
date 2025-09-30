@@ -13,4 +13,7 @@ public interface RestaurantService {
 
     ResponseEntity<StandardResponse<?>> updateRestaurant(Long id, RestaurantDto restaurantDto);
 
+    ResponseEntity<StandardResponse<?>> deleteRestaurant(Long id);
+
+
 }
