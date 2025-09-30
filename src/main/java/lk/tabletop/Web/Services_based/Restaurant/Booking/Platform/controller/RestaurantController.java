@@ -21,8 +21,8 @@ public class RestaurantController {
         return restaurantService.searchRestaurants(city, cuisine, rating);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<StandardResponse<?>> getRestaurantDetails(@PathVariable Long id) {
+    @GetMapping("/restaurantDetail")
+    public ResponseEntity<StandardResponse<?>> getRestaurantDetails(@RequestParam Long id) {
         return restaurantService.getRestaurantDetails(id);
     }
 
