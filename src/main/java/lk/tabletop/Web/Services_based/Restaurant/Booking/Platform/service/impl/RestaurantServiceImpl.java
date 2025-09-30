@@ -91,4 +91,44 @@ public class RestaurantServiceImpl implements RestaurantService {
         return ResponseEntity.status(201).body(response);
     }
 
+    @Override
+    public ResponseEntity<StandardResponse<?>> updateRestaurant(Long id, RestaurantDto restaurantDto) {
+        // Fetch restaurant by ID
+        Restaurant restaurant = restaurantRepository.findById(id).orElse(null);
+
+        if (restaurant == null) {
+            StandardResponse<Object> response = new StandardResponse<>(404, "Restaurant not found");
+            return ResponseEntity.status(404).body(response);
+        }
+
+        // Optional: Check for duplicates (same name + city but different ID)
+        boolean exists = restaurantRepository.existsByNameAndCity(restaurantDto.getName(), restaurantDto.getCity())
+                && !restaurant.getId().equals(id);
+        if (exists) {
+            StandardResponse<Object> response = new StandardResponse<>(409, "Another restaurant with same name and city exists");
+            return ResponseEntity.status(409).body(response);
+        }
+
+        // Update fields
+        restaurant.setName(restaurantDto.getName());
+        restaurant.setCity(restaurantDto.getCity());
+        restaurant.setCuisine(restaurantDto.getCuisine());
+        restaurant.setRating(restaurantDto.getRating());
+        restaurant.setAddress(restaurantDto.getAddress());
+        restaurant.setPhone(restaurantDto.getPhone());
+        restaurant.setWebsite(restaurantDto.getWebsite());
+        restaurant.setSource(restaurantDto.getSource() != null ? restaurantDto.getSource() : restaurant.getSource());
+
+        // Save updated restaurant
+        Restaurant updated = restaurantRepository.save(restaurant);
+
+        StandardResponse<Restaurant> response = new StandardResponse<>(
+                200,
+                "Restaurant updated successfully",
+                updated
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
 }

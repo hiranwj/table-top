@@ -11,5 +11,6 @@ public interface RestaurantService {
 
     ResponseEntity<StandardResponse<?>> addRestaurant(RestaurantDto restaurantDto);
 
+    ResponseEntity<StandardResponse<?>> updateRestaurant(Long id, RestaurantDto restaurantDto);
 
 }

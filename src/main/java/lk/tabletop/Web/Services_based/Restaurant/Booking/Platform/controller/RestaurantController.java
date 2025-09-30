@@ -29,10 +29,17 @@ public class RestaurantController {
         return restaurantService.getRestaurantDetails(id);
     }
 
-    @PostMapping("/admin/add")
+    @PostMapping("/admin/addRestaurant")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<StandardResponse<?>> addRestaurant(@RequestBody @Valid RestaurantDto restaurantDto) {
         return restaurantService.addRestaurant(restaurantDto);
+    }
+
+    @PutMapping("/admin/updateRestaurant/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<StandardResponse<?>> updateRestaurant(@PathVariable Long id,
+                                                                @RequestBody @Valid RestaurantDto restaurantDto) {
+        return restaurantService.updateRestaurant(id, restaurantDto);
     }
 
 }
