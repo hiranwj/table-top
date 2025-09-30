@@ -12,4 +12,8 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
     List<Restaurant> findByCityContainingIgnoreCaseAndCuisineContainingIgnoreCaseAndRatingGreaterThanEqual(
         String city, String cuisine, Double rating
     );
+
+    // Checks if a restaurant with the same name and city exists
+    boolean existsByNameAndCity(String name, String city);
+
 }

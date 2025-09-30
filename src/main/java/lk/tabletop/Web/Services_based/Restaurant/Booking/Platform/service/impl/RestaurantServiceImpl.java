@@ -1,6 +1,8 @@
 package lk.tabletop.Web.Services_based.Restaurant.Booking.Platform.service.impl;
 
+import lk.tabletop.Web.Services_based.Restaurant.Booking.Platform.dto.RestaurantDto;
 import lk.tabletop.Web.Services_based.Restaurant.Booking.Platform.model.Restaurant;
+import lk.tabletop.Web.Services_based.Restaurant.Booking.Platform.model.Source;
 import lk.tabletop.Web.Services_based.Restaurant.Booking.Platform.repository.RestaurantRepository;
 import lk.tabletop.Web.Services_based.Restaurant.Booking.Platform.service.RestaurantService;
 import lk.tabletop.Web.Services_based.Restaurant.Booking.Platform.util.StandardResponse;
@@ -56,4 +58,37 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         return ResponseEntity.ok(response);
     }
+
+    @Override
+    public ResponseEntity<StandardResponse<?>> addRestaurant(RestaurantDto restaurantDto) {
+        // Check for duplicates
+        boolean exists = restaurantRepository.existsByNameAndCity(restaurantDto.getName(), restaurantDto.getCity());
+        if (exists) {
+            StandardResponse<Object> response = new StandardResponse<>(409, "Restaurant already exists");
+            return ResponseEntity.status(409).body(response);
+        }
+
+        // Map DTO to Entity
+        Restaurant restaurant = new Restaurant();
+        restaurant.setName(restaurantDto.getName());
+        restaurant.setCity(restaurantDto.getCity());
+        restaurant.setCuisine(restaurantDto.getCuisine());
+        restaurant.setRating(restaurantDto.getRating());
+        restaurant.setAddress(restaurantDto.getAddress());
+        restaurant.setPhone(restaurantDto.getPhone());
+        restaurant.setWebsite(restaurantDto.getWebsite());
+        restaurant.setSource(restaurantDto.getSource() != null ? restaurantDto.getSource() : Source.OTHER);
+
+        // Save entity
+        Restaurant saved = restaurantRepository.save(restaurant);
+
+        StandardResponse<Restaurant> response = new StandardResponse<>(
+                201,
+                "Restaurant added successfully",
+                saved
+        );
+
+        return ResponseEntity.status(201).body(response);
+    }
+
 }

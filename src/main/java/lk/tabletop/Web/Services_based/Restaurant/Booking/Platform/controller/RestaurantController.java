@@ -1,9 +1,12 @@
 package lk.tabletop.Web.Services_based.Restaurant.Booking.Platform.controller;
 
+import jakarta.validation.Valid;
+import lk.tabletop.Web.Services_based.Restaurant.Booking.Platform.dto.RestaurantDto;
 import lk.tabletop.Web.Services_based.Restaurant.Booking.Platform.service.RestaurantService;
 import lk.tabletop.Web.Services_based.Restaurant.Booking.Platform.util.StandardResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,5 +29,10 @@ public class RestaurantController {
         return restaurantService.getRestaurantDetails(id);
     }
 
+    @PostMapping("/admin/add")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<StandardResponse<?>> addRestaurant(@RequestBody @Valid RestaurantDto restaurantDto) {
+        return restaurantService.addRestaurant(restaurantDto);
+    }
 
 }
